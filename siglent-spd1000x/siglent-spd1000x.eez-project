@@ -1,0 +1,110 @@
+{
+  "settings": {
+    "general": {
+      "namespace": "",
+      "imports": []
+    },
+    "build": {
+      "configurations": [
+        {
+          "name": "Siglent SPD1000X",
+          "description": "Remote control for Siglent SPD1000X series",
+          "properties": ""
+        }
+      ],
+      "files": []
+    }
+  },
+  "scpi": {
+    "subsystems": [],
+    "enums": []
+  },
+  "shortcuts": {
+    "shortcuts": [
+      {
+        "id": "f97e1a9e-6014-47f4-f070-1a36a7bba61f",
+        "name": "Output ON",
+        "action": {
+          "type": "javascript",
+          "data": "connection.acquire();\nconnection.command(\"OUTP CH1,ON\\0\");\nconnection.release();\n"
+        },
+        "keybinding": "f1",
+        "showInToolbar": true,
+        "toolbarButtonPosition": 1,
+        "toolbarButtonColor": "#78C36A",
+        "requiresConfirmation": false
+      },
+      {
+        "id": "6a66aa53-35b6-4928-9ba7-b5283f6ee5b1",
+        "name": "Output OFF",
+        "action": {
+          "type": "javascript",
+          "data": "connection.acquire();\nconnection.command(\"OUTP CH1,OFF\\0\");\nconnection.release();\n"
+        },
+        "keybinding": "f2",
+        "showInToolbar": true,
+        "toolbarButtonPosition": 2,
+        "toolbarButtonColor": "#BD5FA4",
+        "requiresConfirmation": false
+      },
+      {
+        "id": "31eec741-2100-4c75-8072-87ba9b27d6f4",
+        "name": "Output SET",
+        "action": {
+          "type": "javascript",
+          "data": "connection.acquire();\n\nvar voltage = await connection.query(\"CH1:VOLT?\\0\");\nvar current = await connection.query(\"CH1:CURR?\\0\");\n\nvar values = await input({\n    title: \"Output SET\",\n    fields: [\n        { \n            name: \"voltage\",\n            type: \"number\"\n        },\n        { \n            name: \"current\",\n            type: \"number\"\n        }\n    ]\n}, {\n    voltage: voltage,\n    current: current\n});\n\nif (!values) {\n    return;\n}\n\nconnection.command(\"CH1:VOLT \" + values.voltage + \"\\0\");\nconnection.command(\"CH1:CURR \" + values.current + \"\\0\");\n\nconnection.release();\n"
+        },
+        "keybinding": "f3",
+        "showInToolbar": true,
+        "toolbarButtonPosition": 3,
+        "toolbarButtonColor": "#727b84",
+        "requiresConfirmation": false
+      },
+      {
+        "id": "0dbc7e6e-2624-44f2-aa92-7be87e4c62ef",
+        "name": "Remote sense TOGGLE",
+        "action": {
+          "type": "javascript",
+          "data": "function hex2bin(hex)\n{\n    return (parseInt(hex, 16).toString(2)).padStart(9, \"0\");\n}\n\nasync function hasremotesense(connection)\n{\n    var status = hex2bin(await connection.query(\"SYST:STAT?\\0\"));\n    return status[3] == 1;\n}\n\nconnection.acquire();\n\nif (await hasremotesense(connection))\n{\n    connection.command(\"MODE:SET 2W\\0\");\n}\nelse\n{\n    connection.command(\"MODE:SET 4W\\0\");\n}\n\nconnection.release();\n"
+        },
+        "keybinding": "f4",
+        "showInToolbar": true,
+        "toolbarButtonPosition": 4,
+        "toolbarButtonColor": "#EE8C3E",
+        "requiresConfirmation": false,
+        "selected": true
+      }
+    ]
+  },
+  "extensionDefinitions": [
+    {
+      "name": "Siglent SPD1305X",
+      "description": "Siglent SPD1305X",
+      "doNotBuild": false,
+      "buildConfiguration": "Siglent SPD1000X",
+      "image": "spd1305x-front.png",
+      "extensionName": "siglent_spd1305x",
+      "idn": "Siglent Technologies,SPD1305X",
+      "properties": "{\n  \"connection\": {\n    \"ethernet\": {\n      \"port\": 5025\n    }\n  },\n  \"channels\": [\n    {\n      \"maxVoltage\": 30,\n      \"maxCurrent\": 5,\n      \"maxPower\": 150\n    }\n  ]\n}",
+      "idfName": "Siglent SPD1305X",
+      "idfGuid": "1982c24c-7c9c-427c-9946-b94fb2d24346",
+      "idfRevisionNumber": "1",
+      "idfDescription": "Remote control for Siglent SPD1305X",
+      "idfAuthor": "Lex Brugman"
+    },
+    {
+      "name": "Siglent SPD1168X",
+      "description": "Siglent SPD1168X",
+      "buildConfiguration": "Siglent SPD1000X",
+      "image": "spd1168x-front.png",
+      "extensionName": "siglent_spd1168x",
+      "idn": "Siglent Technologies,SPD1168X",
+      "properties": "{\n  \"connection\": {\n    \"ethernet\": {\n      \"port\": 5025\n    }\n  },\n  \"channels\": [\n    {\n      \"maxVoltage\": 16,\n      \"maxCurrent\": 8,\n      \"maxPower\": 128\n    }\n  ]\n}",
+      "idfName": "Siglent SPD1168X",
+      "idfGuid": "c3fba4ac-2f0f-42d2-e765-9aa2e1131693",
+      "idfRevisionNumber": "1",
+      "idfDescription": "Remote control for Siglent SPD1168X",
+      "idfAuthor": "Lex Brugman"
+    }
+  ]
+}

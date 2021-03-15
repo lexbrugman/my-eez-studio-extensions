@@ -1,0 +1,24 @@
+{
+  "viewOptions": {
+    "outputVisible": true,
+    "themesVisible": true
+  },
+  "navigationMap": {
+    "/settings": {
+      "build": {
+        "configurations": {
+          "0": {
+            "$selected": true
+          }
+        }
+      }
+    },
+    "/extensionDefinitions": "/extensionDefinitions/0",
+    "/": "/shortcuts",
+    "/scpi": "/scpi/subsystems"
+  },
+  "editors": [],
+  "selectedBuildConfiguration": "Default",
+  "features": {},
+  "objects": {}
+}
